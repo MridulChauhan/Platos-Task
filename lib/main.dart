@@ -1,15 +1,16 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:platos_task/screens/club_members.dart';
+import 'package:platos_task/screens/screen_2.dart';
 import 'package:platos_task/screens/home_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:platos_task/screens/users.dart';
+import 'package:platos_task/screens/screen_1.dart';
 import 'package:platos_task/utils/utils.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
