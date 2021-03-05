@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:platos_task/services.dart/firebase_func.dart';
 import 'package:platos_task/utils/constants.dart';
+import 'package:platos_task/utils/routes.dart';
 import 'package:platos_task/values/values.dart';
 
 class Users extends StatefulWidget {
@@ -10,19 +11,13 @@ class Users extends StatefulWidget {
 }
 
 class _UsersState extends State<Users> {
+  List<String> _keys = [];
+  List<dynamic> _values = [];
   String _id;
-  String _name;
-  String _email;
   TextEditingController _idController = TextEditingController();
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
 
   void clearTextfield() {
-    _nameController.clear();
-    _emailController.clear();
     _idController.clear();
-    _name = "";
-    _email = "";
     _id = "";
   }
 
@@ -30,16 +25,29 @@ class _UsersState extends State<Users> {
   void dispose() {
     super.dispose();
     _idController.dispose();
-    _nameController.dispose();
-    _emailController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final _theme = Theme.of(context);
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(
+                  right: AppConstants.horizontalPadding * 0.5),
+              child: IconButton(
+                onPressed: () =>
+                    Navigator.pushNamed(context, AppRoutes.addDataScreen),
+                icon: Icon(
+                  Icons.add,
+                  size: AppConstants.iconSize,
+                ),
+              ),
+            ),
+          ],
           centerTitle: true,
           title: Text(
             "Screen 1",
@@ -65,51 +73,54 @@ class _UsersState extends State<Users> {
               SizedBox(
                 height: ScreenUtil().setHeight(10),
               ),
-              ListTile(
-                leading: const Icon(Icons.person),
-                title: new TextField(
-                  controller: _nameController,
-                  decoration: new InputDecoration(
-                    hintText: "Name",
-                  ),
-                  onChanged: (value) {
-                    setState(() => _name = value);
-                  },
-                ),
-              ),
-              SizedBox(
-                height: ScreenUtil().setHeight(10),
-              ),
-              ListTile(
-                leading: const Icon(Icons.email),
-                title: new TextField(
-                  controller: _emailController,
-                  decoration: new InputDecoration(
-                    hintText: "Email",
-                  ),
-                  onChanged: (value) {
-                    setState(() => _email = value);
-                  },
-                ),
-              ),
-              SizedBox(
-                height: ScreenUtil().setHeight(15),
-              ),
               ElevatedButton(
-                  onPressed: () async {
-                    if (_name != null && _email != null) {
-                      FirebaseFunc.addUsers(_id, _name, _email);
-                      clearTextfield();
-                      var userinfo = await FirebaseFunc.getUsers("17BCE0925");
-                      print(userinfo);
-                    } else
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text("Please enter data to add"),
-                        ),
-                      );
-                  },
-                  child: Text("Add Data"))
+                onPressed: () async {
+                  if (_id != null) {
+                    await FirebaseFunc.getUsers(_id).then((value) {
+                      setState(() {
+                        _keys = value[0].keys.toList();
+                        _values = value[0].values.toList();
+                      });
+                    });
+                    clearTextfield();
+                  } else
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("Please enter ID to get UserInfo"),
+                      ),
+                    );
+                },
+                child: Text("Get Info"),
+              ),
+              TextButton(
+                onPressed: () =>
+                    Navigator.pushNamed(context, AppRoutes.updateScreen),
+                child: Text("Update Info"),
+              ),
+              Divider(),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    vertical: AppConstants.verticalPadding * 0.5,
+                    horizontal: AppConstants.horizontalPadding * 0.5),
+                child: (_keys != null && _values != null)
+                    ? ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: _keys.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return ListTile(
+                            leading: Text(
+                              _keys[index].toUpperCase(),
+                              style: _theme.textTheme.headline1,
+                            ),
+                            trailing: Text(
+                              _values[index],
+                              style: _theme.textTheme.headline2,
+                            ),
+                          );
+                        })
+                    : Container(),
+              ),
             ],
           ),
         ),
