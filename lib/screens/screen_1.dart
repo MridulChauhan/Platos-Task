@@ -77,9 +77,20 @@ class _UsersState extends State<Users> {
                 onPressed: () async {
                   if (_id != null) {
                     await FirebaseFunc.getUsers(_id).then((value) {
+                      print(value);
                       setState(() {
-                        _keys = value[0].keys.toList();
-                        _values = value[0].values.toList();
+                        if (value.length != 0) {
+                          _keys = value[0].keys.toList();
+                          _values = value[0].values.toList();
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("User ID does not exist"),
+                            ),
+                          );
+                          _keys = [];
+                          _values = [];
+                        }
                       });
                     });
                     clearTextfield();
@@ -102,7 +113,7 @@ class _UsersState extends State<Users> {
                 padding: EdgeInsets.symmetric(
                     vertical: AppConstants.verticalPadding * 0.5,
                     horizontal: AppConstants.horizontalPadding * 0.5),
-                child: (_keys != null && _values != null)
+                child: (_keys.length != 0 && _values.length != 0)
                     ? ListView.builder(
                         scrollDirection: Axis.vertical,
                         shrinkWrap: true,

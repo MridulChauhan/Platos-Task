@@ -37,6 +37,7 @@ class FirebaseFunc {
   static Future<List<Map<String, dynamic>>> getUsersInfoForParameter(
       Map<String, dynamic> userinfo) {
     List<Map<String, dynamic>> list = [];
+    if (userinfo == null) return Future.value(list);
     return FirebaseFirestore.instance
         .collection("club_members")
         .where("email", isEqualTo: "${userinfo['email']}")
