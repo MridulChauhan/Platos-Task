@@ -5,26 +5,34 @@ import 'package:platos_task/services.dart/firebase_func.dart';
 import 'package:platos_task/utils/constants.dart';
 import 'package:platos_task/values/values.dart';
 
-class UpdateDataScreen extends StatefulWidget {
+class UpdateDataScreen2 extends StatefulWidget {
   @override
-  _UpdateDataScreenState createState() => _UpdateDataScreenState();
+  _UpdateDataScreen2State createState() => _UpdateDataScreen2State();
 }
 
-class _UpdateDataScreenState extends State<UpdateDataScreen> {
+class _UpdateDataScreen2State extends State<UpdateDataScreen2> {
   String _id;
   String _name;
   String _email;
+  String _contact;
+  String _club;
   TextEditingController _idController = TextEditingController();
   TextEditingController _nameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
+  TextEditingController _contactController = TextEditingController();
+  TextEditingController _clubController = TextEditingController();
 
   void clearTextfield() {
     _nameController.clear();
     _emailController.clear();
     _idController.clear();
+    _contactController.clear();
+    _clubController.clear();
     _name = "";
     _email = "";
     _id = "";
+    _contact = "";
+    _club = "";
   }
 
   @override
@@ -33,6 +41,8 @@ class _UpdateDataScreenState extends State<UpdateDataScreen> {
     _idController.dispose();
     _nameController.dispose();
     _emailController.dispose();
+    _contactController.dispose();
+    _clubController.dispose();
   }
 
   @override
@@ -43,7 +53,7 @@ class _UpdateDataScreenState extends State<UpdateDataScreen> {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            "Update Users",
+            "Update Club Members",
             style: AppDecoration.appbarheadingdecoration,
           ),
         ),
@@ -79,6 +89,28 @@ class _UpdateDataScreenState extends State<UpdateDataScreen> {
                 hinttext: "Email",
                 onChanged: (value) {
                   setState(() => _email = value);
+                },
+              ),
+              SizedBox(
+                height: ScreenUtil().setHeight(10),
+              ),
+              MyInputField(
+                controller: _contactController,
+                icon: Icons.phone,
+                hinttext: "Contact",
+                onChanged: (value) {
+                  setState(() => _contact = value);
+                },
+              ),
+              SizedBox(
+                height: ScreenUtil().setHeight(10),
+              ),
+              MyInputField(
+                controller: _clubController,
+                icon: Icons.card_membership,
+                hinttext: "Club Name",
+                onChanged: (value) {
+                  setState(() => _club = value);
                 },
               ),
               SizedBox(

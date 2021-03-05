@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:platos_task/components/input_textfield.dart';
+import 'package:platos_task/services.dart/data_model.dart';
 import 'package:platos_task/services.dart/firebase_func.dart';
 import 'package:platos_task/utils/constants.dart';
 import 'package:platos_task/utils/routes.dart';
 import 'package:platos_task/values/values.dart';
+import 'package:provider/provider.dart';
 
 class Users extends StatefulWidget {
   @override
@@ -58,26 +61,27 @@ class _UsersState extends State<Users> {
           padding: const EdgeInsets.only(top: AppConstants.verticalPadding * 2),
           child: Column(
             children: [
-              ListTile(
-                leading: const Icon(Icons.person),
-                title: new TextField(
-                  controller: _idController,
-                  decoration: new InputDecoration(
-                    hintText: "ID",
-                  ),
-                  onChanged: (value) {
-                    setState(() => _id = value);
-                  },
-                ),
+              Text(
+                context.watch<Data>().count.toString(),
+                style: _theme.textTheme.headline4,
+              ),
+              MyInputField(
+                controller: _idController,
+                icon: Icons.perm_identity,
+                hinttext: "ID",
+                onChanged: (value) {
+                  setState(() => _id = value);
+                },
               ),
               SizedBox(
                 height: ScreenUtil().setHeight(10),
               ),
               ElevatedButton(
                 onPressed: () async {
+                  FocusScope.of(context).unfocus();
                   if (_id != null) {
                     await FirebaseFunc.getUsers(_id).then((value) {
-                      print(value);
+                      //print(value);
                       setState(() {
                         if (value.length != 0) {
                           _keys = value[0].keys.toList();
@@ -105,7 +109,7 @@ class _UsersState extends State<Users> {
               ),
               TextButton(
                 onPressed: () =>
-                    Navigator.pushNamed(context, AppRoutes.updateScreen),
+                    Navigator.pushNamed(context, AppRoutes.updateDataScreen),
                 child: Text("Update Info"),
               ),
               Divider(),
@@ -134,6 +138,10 @@ class _UsersState extends State<Users> {
               ),
             ],
           ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => context.read<Data>().incrementCount(),
+          child: Icon(Icons.add),
         ),
       ),
     );

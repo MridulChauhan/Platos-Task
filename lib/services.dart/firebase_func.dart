@@ -9,7 +9,7 @@ class FirebaseFunc {
   }
 
   static addClubMember(
-      String name, String email, String clubname, String id, String contact) {
+      String id, String name, String email, String clubname, String contact) {
     Map<String, dynamic> data = {
       "name": name,
       "email": email,
@@ -17,9 +17,9 @@ class FirebaseFunc {
       "id": id,
       "contact": contact
     };
-    CollectionReference _clubmember =
-        FirebaseFirestore.instance.collection("club_member");
-    _clubmember.add(data);
+    DocumentReference _clubmember =
+        FirebaseFirestore.instance.collection("club_members").doc(id);
+    _clubmember.set(data);
   }
 
   static Future<List<Map<String, dynamic>>> getUsers(String userid) {
@@ -29,7 +29,6 @@ class FirebaseFunc {
         .get()
         .then((value) {
       return getUsersInfoForParameter(value.data());
-      //return value.data();
     });
     return userinfo;
   }
@@ -45,6 +44,19 @@ class FirebaseFunc {
         .then((value) => value.docs.forEach((result) {
               list.add(result.data());
             }))
-        .then((_) => list);
+        .then((_) => list)
+        .onError((error, stackTrace) => Future.value(list));
+  }
+
+  static Future<String> updateUsers(String id, String name, String email) {
+    return FirebaseFirestore.instance
+        .collection("users")
+        .doc('$id')
+        .update({
+          "name": name,
+          "email": email,
+        })
+        .then((_) => Future.value("Success"))
+        .onError((error, stackTrace) => Future.value("Could not update data"));
   }
 }

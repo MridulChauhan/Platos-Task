@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:platos_task/components/input_textfield.dart';
 import 'package:platos_task/services.dart/firebase_func.dart';
 import 'package:platos_task/utils/constants.dart';
 import 'package:platos_task/values/values.dart';
@@ -42,7 +43,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            "Add Data",
+            "Add Users",
             style: AppDecoration.appbarheadingdecoration,
           ),
         ),
@@ -50,47 +51,35 @@ class _AddDataScreenState extends State<AddDataScreen> {
           padding: const EdgeInsets.only(top: AppConstants.verticalPadding * 2),
           child: Column(
             children: [
-              ListTile(
-                leading: const Icon(Icons.person),
-                title: new TextField(
-                  controller: _idController,
-                  decoration: new InputDecoration(
-                    hintText: "ID",
-                  ),
-                  onChanged: (value) {
-                    setState(() => _id = value);
-                  },
-                ),
+              MyInputField(
+                controller: _idController,
+                icon: Icons.person,
+                hinttext: "ID",
+                onChanged: (value) {
+                  setState(() => _id = value);
+                },
               ),
               SizedBox(
                 height: ScreenUtil().setHeight(10),
               ),
-              ListTile(
-                leading: const Icon(Icons.person),
-                title: new TextField(
-                  controller: _nameController,
-                  decoration: new InputDecoration(
-                    hintText: "Name",
-                  ),
-                  onChanged: (value) {
-                    setState(() => _name = value);
-                  },
-                ),
+              MyInputField(
+                controller: _nameController,
+                icon: Icons.perm_identity,
+                hinttext: "Name",
+                onChanged: (value) {
+                  setState(() => _name = value);
+                },
               ),
               SizedBox(
                 height: ScreenUtil().setHeight(10),
               ),
-              ListTile(
-                leading: const Icon(Icons.email),
-                title: new TextField(
-                  controller: _emailController,
-                  decoration: new InputDecoration(
-                    hintText: "Email",
-                  ),
-                  onChanged: (value) {
-                    setState(() => _email = value);
-                  },
-                ),
+              MyInputField(
+                controller: _emailController,
+                icon: Icons.email,
+                hinttext: "Email",
+                onChanged: (value) {
+                  setState(() => _email = value);
+                },
               ),
               SizedBox(
                 height: ScreenUtil().setHeight(15),
