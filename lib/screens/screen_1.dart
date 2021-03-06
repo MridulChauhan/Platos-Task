@@ -21,7 +21,7 @@ class _UsersState extends State<Users> {
 
   void clearTextfield() {
     _idController.clear();
-    _id = "";
+    _id = null;
   }
 
   @override
@@ -139,6 +139,8 @@ class _UsersState extends State<Users> {
             ],
           ),
         ),
+        floatingActionButtonLocation:
+            FloatingActionButtonLocation.miniCenterFloat,
         floatingActionButton: FloatingActionButton(
           onPressed: () => context.read<Data>().incrementCount(),
           child: Icon(Icons.add),

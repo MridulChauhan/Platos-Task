@@ -22,9 +22,9 @@ class _AddDataScreenState extends State<AddDataScreen> {
     _nameController.clear();
     _emailController.clear();
     _idController.clear();
-    _name = "";
-    _email = "";
-    _id = "";
+    _name = null;
+    _email = null;
+    _id = null;
   }
 
   @override
@@ -39,7 +39,6 @@ class _AddDataScreenState extends State<AddDataScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           centerTitle: true,
           title: Text(
@@ -47,59 +46,67 @@ class _AddDataScreenState extends State<AddDataScreen> {
             style: AppDecoration.appbarheadingdecoration,
           ),
         ),
-        body: Padding(
-          padding: const EdgeInsets.only(top: AppConstants.verticalPadding * 2),
-          child: Column(
-            children: [
-              MyInputField(
-                controller: _idController,
-                icon: Icons.person,
-                hinttext: "ID",
-                onChanged: (value) {
-                  setState(() => _id = value);
-                },
+        body: LayoutBuilder(builder:
+            (BuildContext context, BoxConstraints viewportConstraints) {
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: viewportConstraints.maxHeight,
               ),
-              SizedBox(
-                height: ScreenUtil().setHeight(10),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  MyInputField(
+                    controller: _idController,
+                    icon: Icons.person,
+                    hinttext: "ID",
+                    onChanged: (value) {
+                      setState(() => _id = value);
+                    },
+                  ),
+                  SizedBox(
+                    height: ScreenUtil().setHeight(10),
+                  ),
+                  MyInputField(
+                    controller: _nameController,
+                    icon: Icons.perm_identity,
+                    hinttext: "Name",
+                    onChanged: (value) {
+                      setState(() => _name = value);
+                    },
+                  ),
+                  SizedBox(
+                    height: ScreenUtil().setHeight(10),
+                  ),
+                  MyInputField(
+                    controller: _emailController,
+                    icon: Icons.email,
+                    hinttext: "Email",
+                    onChanged: (value) {
+                      setState(() => _email = value);
+                    },
+                  ),
+                  SizedBox(
+                    height: ScreenUtil().setHeight(15),
+                  ),
+                  ElevatedButton(
+                      onPressed: () {
+                        if (_id != null && _name != null && _email != null) {
+                          FirebaseFunc.addUsers(_id, _name, _email);
+                          clearTextfield();
+                        } else
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("Please enter data to add"),
+                            ),
+                          );
+                      },
+                      child: Text("Add Data"))
+                ],
               ),
-              MyInputField(
-                controller: _nameController,
-                icon: Icons.perm_identity,
-                hinttext: "Name",
-                onChanged: (value) {
-                  setState(() => _name = value);
-                },
-              ),
-              SizedBox(
-                height: ScreenUtil().setHeight(10),
-              ),
-              MyInputField(
-                controller: _emailController,
-                icon: Icons.email,
-                hinttext: "Email",
-                onChanged: (value) {
-                  setState(() => _email = value);
-                },
-              ),
-              SizedBox(
-                height: ScreenUtil().setHeight(15),
-              ),
-              ElevatedButton(
-                  onPressed: () {
-                    if (_id != null && _name != null && _email != null) {
-                      FirebaseFunc.addUsers(_id, _name, _email);
-                      clearTextfield();
-                    } else
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text("Please enter data to add"),
-                        ),
-                      );
-                  },
-                  child: Text("Add Data"))
-            ],
-          ),
-        ),
+            ),
+          );
+        }),
       ),
     );
   }

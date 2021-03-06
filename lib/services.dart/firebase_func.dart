@@ -13,7 +13,7 @@ class FirebaseFunc {
     Map<String, dynamic> data = {
       "name": name,
       "email": email,
-      "club_name": clubname,
+      "club": clubname,
       "id": id,
       "contact": contact
     };
@@ -55,6 +55,22 @@ class FirebaseFunc {
         .update({
           "name": name,
           "email": email,
+        })
+        .then((_) => Future.value("Success"))
+        .onError((error, stackTrace) => Future.value("Could not update data"));
+  }
+
+  static Future<String> updateClubMembers(
+      String id, String name, String email, String clubname, String contact) {
+    return FirebaseFirestore.instance
+        .collection("club_members")
+        .doc('$id')
+        .update({
+          "name": name,
+          "email": email,
+          "club": clubname,
+          "id": id,
+          "contact": contact
         })
         .then((_) => Future.value("Success"))
         .onError((error, stackTrace) => Future.value("Could not update data"));

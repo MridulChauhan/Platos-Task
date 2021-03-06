@@ -23,16 +23,18 @@ class _UpdateDataScreen2State extends State<UpdateDataScreen2> {
   TextEditingController _clubController = TextEditingController();
 
   void clearTextfield() {
+    setState(() {
+      _name = null;
+      _email = null;
+      _id = null;
+      _contact = null;
+      _club = null;
+    });
     _nameController.clear();
     _emailController.clear();
     _idController.clear();
     _contactController.clear();
     _clubController.clear();
-    _name = "";
-    _email = "";
-    _id = "";
-    _contact = "";
-    _club = "";
   }
 
   @override
@@ -49,7 +51,6 @@ class _UpdateDataScreen2State extends State<UpdateDataScreen2> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           centerTitle: true,
           title: Text(
@@ -57,89 +58,103 @@ class _UpdateDataScreen2State extends State<UpdateDataScreen2> {
             style: AppDecoration.appbarheadingdecoration,
           ),
         ),
-        body: Padding(
-          padding: const EdgeInsets.only(top: AppConstants.verticalPadding * 2),
-          child: Column(
-            children: [
-              MyInputField(
-                controller: _idController,
-                icon: Icons.perm_identity,
-                hinttext: "ID",
-                onChanged: (value) {
-                  setState(() => _id = value);
-                },
+        body: LayoutBuilder(builder:
+            (BuildContext context, BoxConstraints viewportConstraints) {
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: viewportConstraints.maxHeight,
               ),
-              SizedBox(
-                height: ScreenUtil().setHeight(10),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  MyInputField(
+                    controller: _idController,
+                    icon: Icons.perm_identity,
+                    hinttext: "ID",
+                    onChanged: (value) {
+                      setState(() => _id = value);
+                    },
+                  ),
+                  SizedBox(
+                    height: ScreenUtil().setHeight(10),
+                  ),
+                  MyInputField(
+                    controller: _nameController,
+                    icon: Icons.person,
+                    hinttext: "Name",
+                    onChanged: (value) {
+                      setState(() => _name = value);
+                    },
+                  ),
+                  SizedBox(
+                    height: ScreenUtil().setHeight(10),
+                  ),
+                  MyInputField(
+                    controller: _emailController,
+                    icon: Icons.email,
+                    hinttext: "Email",
+                    onChanged: (value) {
+                      setState(() => _email = value);
+                    },
+                  ),
+                  SizedBox(
+                    height: ScreenUtil().setHeight(10),
+                  ),
+                  MyInputField(
+                    controller: _contactController,
+                    icon: Icons.phone,
+                    hinttext: "Contact",
+                    onChanged: (value) {
+                      setState(() => _contact = value);
+                    },
+                  ),
+                  SizedBox(
+                    height: ScreenUtil().setHeight(10),
+                  ),
+                  MyInputField(
+                    controller: _clubController,
+                    icon: Icons.card_membership,
+                    hinttext: "Club Name",
+                    onChanged: (value) {
+                      setState(() => _club = value);
+                    },
+                  ),
+                  SizedBox(
+                    height: ScreenUtil().setHeight(15),
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      FocusScope.of(context).unfocus();
+                      if (_id != null &&
+                          _name != null &&
+                          _email != null &&
+                          _club != null &&
+                          _contact != null) {
+                        await FirebaseFunc.updateClubMembers(
+                                _id, _name, _email, _club, _contact)
+                            .then((value) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(value),
+                            ),
+                          );
+                          clearTextfield();
+                        });
+                      } else
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text("Please enter data to update"),
+                          ),
+                        );
+                    },
+                    child: Text("Update Data"),
+                  ),
+                ],
               ),
-              MyInputField(
-                controller: _nameController,
-                icon: Icons.person,
-                hinttext: "Name",
-                onChanged: (value) {
-                  setState(() => _name = value);
-                },
-              ),
-              SizedBox(
-                height: ScreenUtil().setHeight(10),
-              ),
-              MyInputField(
-                controller: _emailController,
-                icon: Icons.email,
-                hinttext: "Email",
-                onChanged: (value) {
-                  setState(() => _email = value);
-                },
-              ),
-              SizedBox(
-                height: ScreenUtil().setHeight(10),
-              ),
-              MyInputField(
-                controller: _contactController,
-                icon: Icons.phone,
-                hinttext: "Contact",
-                onChanged: (value) {
-                  setState(() => _contact = value);
-                },
-              ),
-              SizedBox(
-                height: ScreenUtil().setHeight(10),
-              ),
-              MyInputField(
-                controller: _clubController,
-                icon: Icons.card_membership,
-                hinttext: "Club Name",
-                onChanged: (value) {
-                  setState(() => _club = value);
-                },
-              ),
-              SizedBox(
-                height: ScreenUtil().setHeight(15),
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  FocusScope.of(context).unfocus();
-                  if (_id != null && _name != null && _email != null) {
-                    await FirebaseFunc.updateUsers(_id, _name, _email).then(
-                      (value) => ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(value),
-                        ),
-                      ),
-                    );
-                    clearTextfield();
-                  } else
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text("Please enter data to update"),
-                      ),
-                    );
-                },
-                child: Text("Update Data"),
-              ),
-            ],
-          ),
-        ),
+            ),
+          );
+        }),
       ),
     );
   }
