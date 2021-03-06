@@ -13,22 +13,6 @@ class ClubMembers extends StatefulWidget {
 }
 
 class _ClubMembersState extends State<ClubMembers> {
-  List<String> _keys = [];
-  List<dynamic> _values = [];
-  String _email;
-  TextEditingController _emailController = TextEditingController();
-
-  void clearTextfield() {
-    _emailController.clear();
-    _email = "";
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _emailController.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     final _theme = Theme.of(context);

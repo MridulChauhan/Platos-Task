@@ -3,7 +3,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:platos_task/components/input_textfield.dart';
 import 'package:platos_task/services.dart/firebase_func.dart';
-import 'package:platos_task/utils/constants.dart';
 import 'package:platos_task/values/values.dart';
 
 class AddDataScreen2 extends StatefulWidget {
