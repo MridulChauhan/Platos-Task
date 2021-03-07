@@ -1,16 +1,8 @@
-# platos_task
+# Platos_task
 
-A new Flutter project.
+## A Flutter/Firebase app with the following features :-
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. Cloud Firestore integation as a database.
+2. Basic routing.
+3. Add, pull and update operations performed on the data from each collection, using Futures and Streams
+4. Two increment counters - one in each page connected using a Provider(ie. the value of the increment counter is stored as a single variable in the provider which is listened to    by both pages and updated on change)
